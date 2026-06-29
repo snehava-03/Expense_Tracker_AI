@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Advisor — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}" class="active">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container" style="max-width:860px;">
+    <h2>🤖 AI Financial Advisor</h2>
+    <p class="page-subtitle">Personalized analysis based on your spending</p>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+        <div class="card green">
+            <div class="card-label">Income</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.income) }}</div>
+        </div>
+        <div class="card red">
+            <div class="card-label">Expenses</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.expenses) }}</div>
+        </div>
+        <div class="card {{ 'green' if summary.savings >= 0 else 'red' }}">
+            <div class="card-label">Savings</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.savings) }}</div>
+        </div>
+        <div class="card amber">
+            <div class="card-label">Top Category</div>
+            <div class="card-value" style="font-size:15px;">
+                {{ summary.highest_category }}
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Analysis -->
+    <div class="box">
+        <h3 style="color:#7c3aed;">📊 Your Personalized Financial Analysis</h3>
+        <div class="ai-content">{{ analysis }}</div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container">
+    <h2>Dashboard — {{ now.strftime('%B %Y') }}</h2>
+    <p class="page-subtitle">Welcome back, {{ session.get('username', 'Admin') }}!</p>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+        <div class="card green">
+            <div class="card-label">Total Income</div>
+            <div class="card-value">₹{{ "{:,.2f}".format(summary.income) }}</div>
+        </div>
+        <div class="card red">
+            <div class="card-label">Total Expenses</div>
+            <div class="card-value">₹{{ "{:,.2f}".format(summary.expenses) }}</div>
+        </div>
+        <div class="card {{ 'green' if summary.savings >= 0 else 'red' }}">
+            <div class="card-label">Net Savings</div>
+            <div class="card-value">₹{{ "{:,.2f}".format(summary.savings) }}</div>
+        </div>
+        <div class="card amber">
+            <div class="card-label">Highest Spending</div>
+            <div class="card-value" style="font-size:16px;">
+                {{ summary.highest_category }}
+            </div>
+        </div>
+        <div class="card purple">
+            <div class="card-label">Savings Rate</div>
+            <div class="card-value">{{ "{:.1f}".format(summary.savings_rate) }}%</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="actions">
+        <a href="{{ url_for('add_expense') }}"        class="btn btn-blue">+ Add Expense</a>
+        <a href="{{ url_for('ai_advisor') }}"          class="btn btn-purple">🤖 AI Analysis</a>
+        <a href="{{ url_for('budget_planner') }}"      class="btn btn-green">📋 Budget Planner</a>
+        <a href="{{ url_for('monthly_report') }}" class="btn btn-orange">📄 Monthly Report</a>
+    </div>
+
+    <!-- Overspending Alerts -->
+    {% if alerts %}
+    <div class="box" style="border-left: 4px solid #dc2626;">
+        <h3 style="color:#dc2626;">⚠️ Overspending Alerts</h3>
+        <div class="ai-content">{{ alerts }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Category Breakdown Table -->
+    <div class="box">
+        <h3>Spending by Category — {{ now.strftime('%B %Y') }}</h3>
+        {% if summary.categories %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>% of Expenses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat, amt in summary.categories.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ cat }}</td>
+                        <td>₹{{ "{:,.2f}".format(amt) }}</td>
+                        <td>
+                            {{ "{:.1f}".format(
+                                amt / summary.expenses * 100
+                                if summary.expenses > 0 else 0
+                            ) }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="color:#6b7280;">No expenses recorded this month yet.</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

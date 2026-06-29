@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Report — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .download-box { text-align: center; }
+        .download-box p { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+        .btn-download { display: inline-block; padding: 14px 36px;
+                        background: #2563eb; color: white; border-radius: 6px;
+                        text-decoration: none; font-size: 16px; font-weight: bold; }
+        .btn-download:hover { background: #1d4ed8; opacity: 1; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}" class="active">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container" style="max-width:860px;">
+    <h2>📄 Monthly Report</h2>
+    <p class="page-subtitle">{{ month_year }}</p>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+        <div class="card green">
+            <div class="card-label">Total Income</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.income) }}</div>
+        </div>
+        <div class="card red">
+            <div class="card-label">Total Expenses</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.expenses) }}</div>
+        </div>
+        <div class="card {{ 'green' if summary.savings >= 0 else 'red' }}">
+            <div class="card-label">Net Savings</div>
+            <div class="card-value">₹{{ "{:,.0f}".format(summary.savings) }}</div>
+        </div>
+        <div class="card purple">
+            <div class="card-label">Savings Rate</div>
+            <div class="card-value">
+                {{ "{:.1f}".format(summary.savings_rate) }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- Download PDF -->
+    <div class="box download-box">
+        <h3>📥 Download Full PDF Report</h3>
+        <p>
+            Your complete monthly report includes all spending categories,
+            AI financial insights, savings analysis and recommendations
+            — all in one downloadable PDF file.
+        </p>
+        <a href="{{ url_for('monthly_report') }}" class="btn-download">
+            ⬇️ Download PDF Report
+        </a>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="box">
+        <h3>Spending by Category</h3>
+        {% if summary.categories %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>% of Expenses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat, amt in summary.categories.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ cat }}</td>
+                        <td>₹{{ "{:,.2f}".format(amt) }}</td>
+                        <td>
+                            {{ "{:.1f}".format(
+                                amt / summary.expenses * 100
+                                if summary.expenses > 0 else 0
+                            ) }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="color:#6b7280;">No expenses recorded this month.</p>
+        {% endif %}
+    </div>
+
+    <!-- AI Insights -->
+    {% if ai_analysis %}
+    <div class="box">
+        <h3 style="color:#7c3aed;">🤖 AI Financial Insights</h3>
+        <div class="ai-content">{{ ai_analysis }}</div>
+    </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

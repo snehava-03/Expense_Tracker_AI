@@ -1,0 +1,274 @@
+/* style.css
+   Global styles shared across all pages of FinSight AI */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    color: #374151;
+}
+
+/* ── Navigation ── */
+nav {
+    background: #1e3a8a;
+    padding: 12px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+nav .logout {
+    margin-left: auto;
+    background: #dc2626;
+}
+
+nav .logout:hover {
+    background: #b91c1c;
+}
+
+/* ── Page Container ── */
+.container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.container-sm {
+    max-width: 640px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+/* ── Page Heading ── */
+h2 {
+    color: #1e3a8a;
+    margin-bottom: 4px;
+    font-size: 22px;
+}
+
+.page-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ── White Card Box ── */
+.box {
+    background: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.box h3 {
+    color: #1e3a8a;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+/* ── Summary Cards Grid ── */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card {
+    background: white;
+    padding: 18px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card .card-label {
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.card .card-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3a8a;
+}
+
+.card.green .card-value { color: #065f46; }
+.card.red   .card-value { color: #dc2626; }
+.card.amber .card-value { color: #92400e; }
+.card.purple .card-value { color: #5b21b6; }
+
+/* ── Form Elements ── */
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.error-field {
+    border-color: #ef4444 !important;
+}
+
+.error-msg {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ── Buttons ── */
+.btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+}
+
+.btn:hover { opacity: 0.88; }
+
+.btn-blue   { background: #2563eb; color: white; }
+.btn-green  { background: #059669; color: white; }
+.btn-red    { background: #dc2626; color: white; }
+.btn-purple { background: #7c3aed; color: white; }
+.btn-orange { background: #d97706; color: white; }
+.btn-full   { width: 100%; text-align: center; }
+
+/* ── Flash Messages ── */
+.flash-success {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.flash-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* ── Tables ── */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th {
+    background: #1e3a8a;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+}
+
+tr:nth-child(even) td { background: #f9fafb; }
+tr:hover td { background: #eff6ff; }
+
+/* ── AI Content ── */
+.ai-content {
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #374151;
+}
+
+/* ── Quick Action Buttons Row ── */
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    nav { gap: 6px; }
+    nav a { font-size: 12px; padding: 5px 8px; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .card .card-value { font-size: 18px; }
+}
+
+@media (max-width: 380px) {
+    .cards { grid-template-columns: 1fr; }
+}

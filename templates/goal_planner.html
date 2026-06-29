@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Planner — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}" class="active">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container" style="max-width:760px;">
+    <h2>🎯 Goal Planner</h2>
+    <p class="page-subtitle">
+        Set a savings goal and AI checks if it is achievable
+    </p>
+
+    <div class="box">
+        <form method="POST" action="{{ url_for('goal_planner') }}">
+
+            <!-- Goal Name -->
+            <div class="form-group">
+                <label for="goal_name">What are you saving for? *</label>
+                <input type="text" id="goal_name" name="goal_name"
+                       value="{{ form_data.get('goal_name', '') }}"
+                       class="{{ 'error-field' if errors.get('goal_name') }}"
+                       placeholder="e.g. New Laptop, Emergency Fund, Trip to Goa">
+                {% if errors.get('goal_name') %}
+                    <div class="error-msg">{{ errors.goal_name }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Target Amount -->
+            <div class="form-group">
+                <label for="target_amount">Target Amount (₹) *</label>
+                <input type="number" id="target_amount" name="target_amount"
+                       min="1" step="1"
+                       value="{{ form_data.get('target_amount', '') }}"
+                       class="{{ 'error-field' if errors.get('target_amount') }}"
+                       placeholder="e.g. 50000">
+                {% if errors.get('target_amount') %}
+                    <div class="error-msg">{{ errors.target_amount }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Months -->
+            <div class="form-group">
+                <label for="months">In how many months? *</label>
+                <input type="number" id="months" name="months"
+                       min="1" step="1"
+                       value="{{ form_data.get('months', '') }}"
+                       class="{{ 'error-field' if errors.get('months') }}"
+                       placeholder="e.g. 8">
+                {% if errors.get('months') %}
+                    <div class="error-msg">{{ errors.months }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Monthly amount preview (calculated live by JS) -->
+            <div id="monthly-preview"
+                 style="background:#f0fdf4;padding:12px;border-radius:6px;
+                        margin-bottom:16px;font-size:14px;color:#065f46;
+                        display:none;">
+                Monthly savings needed:
+                <strong id="monthly-amount"></strong>
+            </div>
+
+            <button type="submit" class="btn btn-orange">
+                Check Goal Feasibility 🎯
+            </button>
+        </form>
+    </div>
+
+    <!-- AI Advice Result -->
+    {% if advice %}
+    <div class="box">
+        <h3 style="color:#d97706;">🤖 AI Goal Analysis</h3>
+        <div class="ai-content">{{ advice }}</div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Live preview of monthly savings needed
+    function updatePreview() {
+        const target = parseFloat(document.getElementById("target_amount").value);
+        const months = parseInt(document.getElementById("months").value);
+        const preview = document.getElementById("monthly-preview");
+        const amount  = document.getElementById("monthly-amount");
+
+        if (target > 0 && months > 0) {
+            const monthly = (target / months).toFixed(2);
+            amount.textContent = "₹" + parseFloat(monthly).toLocaleString("en-IN");
+            preview.style.display = "block";
+        } else {
+            preview.style.display = "none";
+        }
+    }
+
+    document.getElementById("target_amount")
+            .addEventListener("input", updatePreview);
+    document.getElementById("months")
+            .addEventListener("input", updatePreview);
+
+    // Run on page load to restore preview if form was repopulated
+    updatePreview();
+</script>
+</body>
+</html>

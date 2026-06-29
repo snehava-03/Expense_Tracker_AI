@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .type-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .type-btn { padding: 12px; border: 2px solid #d1d5db; border-radius: 6px;
+                    text-align: center; cursor: pointer; font-size: 14px;
+                    font-weight: bold; background: white; display: block; }
+        .income-active  { border-color:#059669; background:#d1fae5; color:#065f46; }
+        .expense-active { border-color:#dc2626; background:#fee2e2; color:#b91c1c; }
+        input[type="radio"] { width: auto; margin-right: 6px; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}" class="active">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container-sm">
+    <div class="box">
+        <h2 style="margin-bottom:20px;">Add Income / Expense</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('add_expense') }}">
+
+            <!-- Type -->
+            <div class="form-group">
+                <label>Type *</label>
+                <div class="type-row">
+                    <label style="font-weight:normal;">
+                        <input type="radio" name="type" value="income"
+                               {{ 'checked' if form_data.get('type') == 'income' }}
+                               onchange="setType('income')">
+                        <span class="type-btn" id="income-btn">💰 Income</span>
+                    </label>
+                    <label style="font-weight:normal;">
+                        <input type="radio" name="type" value="expense"
+                               {{ 'checked' if form_data.get('type') == 'expense' }}
+                               onchange="setType('expense')">
+                        <span class="type-btn" id="expense-btn">💸 Expense</span>
+                    </label>
+                </div>
+                {% if errors.get('type') %}
+                    <div class="error-msg">{{ errors.type }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" name="category"
+                        class="{{ 'error-field' if errors.get('category') }}">
+                    <option value="">-- Select Category --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}"
+                        {{ 'selected' if form_data.get('category') == cat }}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% if errors.get('category') %}
+                    <div class="error-msg">{{ errors.category }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+                <label for="amount">Amount (₹) *</label>
+                <input type="number" id="amount" name="amount"
+                       step="0.01" min="0.01"
+                       value="{{ form_data.get('amount', '') }}"
+                       class="{{ 'error-field' if errors.get('amount') }}"
+                       placeholder="e.g. 1500">
+                {% if errors.get('amount') %}
+                    <div class="error-msg">{{ errors.amount }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+                <label for="date">Date *</label>
+                <input type="date" id="date" name="date"
+                       value="{{ form_data.get('date', today) }}"
+                       class="{{ 'error-field' if errors.get('date') }}">
+                {% if errors.get('date') %}
+                    <div class="error-msg">{{ errors.date }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+                <label for="notes">Notes (optional)</label>
+                <input type="text" id="notes" name="notes"
+                       value="{{ form_data.get('notes', '') }}"
+                       placeholder="e.g. Grocery shopping at DMart">
+            </div>
+
+            <button type="submit" class="btn btn-blue btn-full">
+                Save Entry
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function setType(type) {
+        document.getElementById("income-btn").className =
+            "type-btn" + (type === "income" ? " income-active" : "");
+        document.getElementById("expense-btn").className =
+            "type-btn" + (type === "expense" ? " expense-active" : "");
+    }
+    const checked = document.querySelector('input[name="type"]:checked');
+    if (checked) setType(checked.value);
+</script>
+</body>
+</html>

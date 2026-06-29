@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+            gap: 20px;
+        }
+        .chart-box {
+            background: white; padding: 20px; border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .chart-box h3 { color: #1e3a8a; margin-top: 0; margin-bottom: 16px; }
+        .full-width { grid-column: 1 / -1; }
+    </style>
+    <!-- Chart.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}" class="active">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container">
+    <h2>📊 Spending Charts</h2>
+    <p class="page-subtitle">Visual breakdown of your finances</p>
+
+    {% if summary.categories %}
+    <div class="charts-grid">
+
+        <!-- Pie Chart -->
+        <div class="chart-box">
+            <h3>Category Breakdown (This Month)</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="chart-box">
+            <h3>Category Bar Chart</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <!-- Trend Line Chart — full width -->
+        <div class="chart-box full-width">
+            <h3>Monthly Income vs Expenses (Last 6 Months)</h3>
+            <canvas id="trendChart"></canvas>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="box">
+        <p style="color:#6b7280;text-align:center;padding:20px;">
+            No expense data yet. Add some expenses first to see charts.
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Pass Flask data to JavaScript -->
+<script>
+    const categories   = {{ summary.categories | tojson }};
+    const monthlyTrend = {{ monthly_trend | tojson }};
+</script>
+
+<!-- Load our charts.js file -->
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+<!-- Call chart functions -->
+<script>
+    if (Object.keys(categories).length > 0) {
+        createPieChart("pieChart", categories);
+        createBarChart("barChart", categories);
+    }
+    if (monthlyTrend.length > 0) {
+        createTrendChart("trendChart", monthlyTrend);
+    }
+</script>
+</body>
+</html>

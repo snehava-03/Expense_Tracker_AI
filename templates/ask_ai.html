@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI — FinSight AI</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .example-btn { padding: 6px 14px; background: #ede9fe; color: #5b21b6;
+                       border: none; border-radius: 20px; font-size: 13px;
+                       cursor: pointer; }
+        .example-btn:hover { background: #ddd6fe; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">Add Expense</a>
+    <a href="{{ url_for('charts') }}">Charts</a>
+    <a href="{{ url_for('ai_advisor') }}">AI Advisor</a>
+    <a href="{{ url_for('ask_ai') }}" class="active">Ask AI</a>
+    <a href="{{ url_for('budget_planner') }}">Budget Planner</a>
+    <a href="{{ url_for('goal_planner') }}">Goal Planner</a>
+    <a href="{{ url_for('monthly_report') }}">Monthly Report</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<div class="container" style="max-width:760px;">
+    <h2>💬 Ask Your AI Financial Advisor</h2>
+    <p class="page-subtitle">Ask anything about your finances</p>
+
+    <div class="box">
+        <form method="POST" action="{{ url_for('ask_ai') }}">
+            <div class="form-group">
+                <label for="questionBox">Your Question</label>
+                <textarea id="questionBox" name="question"
+                          placeholder="e.g. Why am I spending so much? Can I afford a ₹60,000 laptop?"
+                          >{{ question }}</textarea>
+            </div>
+
+            <!-- Example question buttons -->
+            <div class="examples">
+                <button type="button" class="example-btn"
+                    onclick="setQ('Why am I overspending this month?')">
+                    Why am I overspending?
+                </button>
+                <button type="button" class="example-btn"
+                    onclick="setQ('Can I afford to buy a laptop worth ₹60,000?')">
+                    Can I afford a laptop?
+                </button>
+                <button type="button" class="example-btn"
+                    onclick="setQ('How can I save more money each month?')">
+                    How to save more?
+                </button>
+                <button type="button" class="example-btn"
+                    onclick="setQ('What is my biggest unnecessary expense?')">
+                    Biggest waste?
+                </button>
+            </div>
+
+            <button type="submit" class="btn btn-purple"
+                    style="margin-top:14px;">
+                Ask AI 🤖
+            </button>
+        </form>
+    </div>
+
+    {% if answer %}
+    <div class="box">
+        <h3 style="color:#7c3aed;">🤖 AI Answer</h3>
+        {% if question %}
+            <p style="color:#6b7280;font-size:13px;margin-bottom:12px;">
+                Your question: <em>"{{ question }}"</em>
+            </p>
+        {% endif %}
+        <div class="ai-content">{{ answer }}</div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function setQ(text) {
+        document.getElementById("questionBox").value = text;
+    }
+</script>
+</body>
+</html>
