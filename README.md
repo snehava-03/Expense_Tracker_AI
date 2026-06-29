@@ -1,40 +1,133 @@
-# FinSight AI — Personal Financial Advisor
+# FinSight AI – Personal Financial Advisor
 
-## How to Run
+## Overview
 
-1. Install Python 3.x from python.org
+FinSight AI is a web-based Expense Tracker and Personal Financial Advisor developed using **Python, Flask, MySQL, HTML, CSS, JavaScript, Chart.js, ReportLab, and Google Gemini AI**. The application helps users track income and expenses, visualize spending patterns, generate monthly reports, and receive AI-powered financial insights.
 
-2. Install dependencies:
-   pip install -r requirements.txt
-
-3. Get Gemini API Key:
-   Go to https://makersuite.google.com/app/apikey
-   Create a key and paste it in ai_helper.py
-
-4. Open MySQL Workbench and run finsight_db.sql
-
-5. Open database.py and set your MySQL password
-
-6. Run:
-   python app.py
-
-7. Open browser: http://127.0.0.1:5000
-
-## Login Credentials
-   Username: admin
-   Password: finsight123
-
-## Database
-   Name: finsight_db
-   Tables: expenses, goals
+---
 
 ## Features
-   - Dashboard with monthly summary
-   - Add income and expenses
-   - Charts (pie, bar, line)
-   - AI financial analysis using Gemini
-   - Ask AI any financial question
-   - Smart budget planner
-   - Goal planner with feasibility check
-   - Overspending alerts
-   - Download monthly PDF report
+
+* Secure login using hard-coded credentials
+* Dashboard with monthly income, expenses, savings, and spending summary
+* Add and manage income and expense records
+* Interactive Pie, Bar, and Line Charts using Chart.js
+* AI-powered financial analysis using Google Gemini AI
+* Ask AI personalized finance-related questions
+* Smart Budget Planner
+* Goal Planner with feasibility analysis
+* Overspending alerts
+* Download Monthly PDF Report
+
+---
+
+## Project Structure
+
+```
+finsight_ai/
+│── app.py
+│── database.py
+│── ai_helper.py
+│── pdf_generator.py
+│── requirements.txt
+│── expense_db.sql
+│── README.md
+│── .env
+│── .gitignore
+│
+├── templates/
+├── static/
+```
+
+---
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/Expense_Tracker_AI.git
+cd Expense_Tracker_AI
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Gemini API
+
+Create a file named `.env` in the project folder and add:
+
+```text
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+```
+
+### 4. Setup MySQL Database
+
+* Open MySQL Workbench.
+* Execute `expense_db.sql`.
+* Open `database.py` and update your MySQL username and password.
+
+### 5. Run the application
+
+```bash
+python app.py
+```
+
+Open your browser and visit:
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## Login Credentials
+
+**Username:** `admin`
+
+**Password:** `finsight123`
+
+*(The current version uses hard-coded login credentials for demonstration purposes.)*
+
+---
+
+## Database
+
+**Database Name:** `expense_db`
+
+**Tables:**
+
+* expenses
+* goals
+
+---
+
+## Technologies Used
+
+* Python
+* Flask
+* MySQL
+* HTML5
+* CSS3
+* JavaScript
+* Chart.js
+* ReportLab
+* Google Gemini AI
+
+---
+
+## Future Enhancements
+
+* User registration and authentication
+* Password encryption
+* Email notifications
+* Mobile-responsive design
+* Export reports in Excel format
+* Expense prediction using Machine Learning
+
+---
+
+Developed as an AI-powered Expense Tracker and Personal Financial Advisor project.
